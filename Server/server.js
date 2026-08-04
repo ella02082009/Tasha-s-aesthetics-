@@ -11,7 +11,10 @@ const Order = require('./models/order');
 const { sendEmail } = require('./utils/sendEmail');
 console.log("--- ORDER ROUTE CHECK --- Is sendEmail a function here?:", typeof sendEmail);
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*', // or specify your Vercel URL
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
