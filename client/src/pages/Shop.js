@@ -55,18 +55,15 @@ const Shop = () => {
         {Array.isArray(products) && filteredProducts.map(product => {
           const productId = product._id;
           // Get raw path or fallback
-          const rawImage = (Array.isArray(product.image) && product.image.length > 0)
-            ? product.image[0]
-            : (product.imageUrl || product.image || "https://placehold.co/300x300?text=No+Image");
+         // 1. Grab the image URL from array position 0 or direct string
+        const rawImage = (Array.isArray(product.image) && product.image.length > 0)
+          ? product.image[0]
+          : (product.imageUrl || product.image);
 
-          // Get live backend domain from .env or fallback
-          const liveBackendUrl = import.meta.env.VITE_API_URL || 'https://tasha-s-aesthetics-.onrender.com';
-
-          // Prepend domain to relative paths
-          let imageSrc = rawImage;
-          if (typeof rawImage === 'string' && rawImage.startsWith('/uploads')) {
-            imageSrc = `${liveBackendUrl}${rawImage}`;
-          }
+        // 2. Set default fallback placeholder
+        const imageSrc = (typeof rawImage === 'string' && rawImage.trim() !== '')
+          ? rawImage
+          : 'https://placehold.co/300x300?text=No+Image';
           return (
             <Link to={`/product/${productId}`} key={productId} className="product-card-link">
               <div className="product-card">
