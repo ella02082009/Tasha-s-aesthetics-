@@ -5,7 +5,6 @@ import'../components/Footer';
 
 const Home = ()=> {
 const [products] = useState([
-    { id: 1, name: 'TASHAS PENNY BROWN', price: 8500, image: 'product2.png' },
     { id: 2, name: 'TASHAS FLAMINGO PINK', price: 8500, image: 'product1.png' },
     { id: 3, name: 'ANNASTASIA', price: 5500, image: 'product3.png' },
 ]);
