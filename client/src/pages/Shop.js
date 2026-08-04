@@ -4,24 +4,7 @@ import { Link } from 'react-router-dom';
 import '../styles/global.css'; 
 import { useCart } from '../context/CartContext';
 
-const formatImageUrl = (path) => {
-  if (!path) return 'https://placehold.co/300x300?text=No+Image';
 
-  const liveBackendUrl = import.meta.env.VITE_API_URL || 'https://tasha-s-aesthetics-.onrender.com';
-
-  // Fix hardcoded localhost links from database entries
-  if (path.includes('http://localhost:5000')) {
-    return path.replace('http://localhost:5000', liveBackendUrl);
-  }
-
-  // Preserve existing valid http/https URLs
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
-  }
-
-  // Prepend dynamic API base URL to relative paths
-  return `${liveBackendUrl}${path.startsWith('/') ? '' : '/'}${path}`;
-};
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,9 +54,9 @@ const Shop = () => {
       <div className="product-grid">
         {Array.isArray(products) && filteredProducts.map(product => {
           const productId = product._id;
-          const imageSrc = formatImageUrl((Array.isArray(product.image) && product.image.length > 0)
+          const imageSrc = (Array.isArray(product.image) && product.image.length > 0)
             ? product.image[0]
-            : (product.imageUrl || product.image || "https://placehold.co/300x300?text=No+Image"));
+            : (product.imageUrl || product.image || "https://placehold.co/300x300?text=No+Image");
           return (
             <Link to={`/product/${productId}`} key={productId} className="product-card-link">
               <div className="product-card">
