@@ -54,16 +54,9 @@ const Shop = () => {
       <div className="product-grid">
         {Array.isArray(products) && filteredProducts.map(product => {
           const productId = product._id;
-          // 1. Your exact existing image variable:
-          const rawImage = (Array.isArray(product.image) && product.image.length > 0)
+          const imageSrc = (Array.isArray(product.image) && product.image.length > 0)
             ? product.image[0]
             : (product.imageUrl || product.image || "https://placehold.co/300x300?text=No+Image");
-
-          // 2. The fail-safe HTTPS converter:
-          const imageSrc = typeof rawImage === 'string' && rawImage.includes('http://localhost:5000')
-            ? rawImage.replace('http://localhost:5000', import.meta.env.VITE_API_URL || 'https://tasha-s-aesthetics-.onrender.com')
-            : rawImage;
-        
           return (
             <Link to={`/product/${productId}`} key={productId} className="product-card-link">
               <div className="product-card">
