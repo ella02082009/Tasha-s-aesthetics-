@@ -5,15 +5,19 @@ const mongoose = require('mongoose');
 
 const createProduct = async (req, res) => {
     try{
+
         const {name, description, price, image, category, countInStock} = req.body;
         let imagePaths = [];
 
             if (req.files && req.files.length > 0) {
-            imagePaths = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+            imagePaths = req.files.map(file => `/uploads/${file.filename}`);
             } 
             else if (req.file) {
-            imagePaths.push(`http://localhost:5000/uploads/${req.file.filename}`);
+            imagePaths.push(`/uploads/${req.file.filename}`);
             }
+            else if (image) {
+            imagePaths = Array.isArray(image) ? image : [image];
+        }
     
         const newProduct = new Product ({
             name,
