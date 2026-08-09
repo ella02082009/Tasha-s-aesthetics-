@@ -5,7 +5,7 @@ import '../styles/global.css';
 import { useCart } from '../context/CartContext';
 
 // 1. Set dynamic API Base URL
-const API_BASE_URL = process.env.VITE_API_URL || 'https://tasha-s-aesthetics-.onrender.com';
+const API_BASE_URL = process.env.VITE_API_URL || 'https://tasha-s-aesthetics.onrender.com';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
