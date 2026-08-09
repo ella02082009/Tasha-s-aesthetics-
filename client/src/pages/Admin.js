@@ -3,18 +3,27 @@ import axios from 'axios';
 import '../styles/global.css'; 
 import { Link } from 'react-router-dom';
 
+// 1. Set dynamic API Base URL
+const API_BASE_URL = process.env.VITE_API_URL || 'https://tasha-s-aesthetics.onrender.com';
+
 const Admin = ({ adminKey }) => {
   const [product, setProduct] = useState({
-    name: '', price: '', category: 'LipLiner', description: '', image: ''
+    name: '', price: '', category: 'LipLiner', description: '', countInStock: '', image: ''
   });
 
-  const[selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!selectedFile) {
+      alert("Please select an image file to upload.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', product.name);
@@ -22,14 +31,20 @@ const Admin = ({ adminKey }) => {
     formData.append('category', product.category);
     formData.append('description', product.description);
     formData.append('countInStock', product.countInStock);
-    formData.append('image', selectedFile);
-    formData.append('secretKey', adminKey); // Include the adminKey in the form data
+    formData.append('image', selectedFile); // Key MUST match backend multer field name ('image')
+    formData.append('secretKey', adminKey); 
+
     try {
-      // Include the adminKey in the request body for backend verification
-      await axios.post('http://localhost:5000/api/products/add', formData);
+      // 2. Post directly to live Render backend URL
+      await axios.post(`${API_BASE_URL}/api/products/add`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       alert("Product successfully added to the store!");
     } catch (err) {
-      alert("Authorization failed on server. Product not added.");
+      console.error("Admin Upload Error:", err.response?.data || err);
+      alert(err.response?.data?.message || "Authorization failed on server. Product not added.");
     }
   };
 
@@ -52,8 +67,8 @@ const Admin = ({ adminKey }) => {
         </select>
       </div>
       <div className="form-group">
-        <label htmlFor="countInStock">CountInStock</label>
-        <input type="number" id="countInStock" placeholder="countInStock" onChange={(e) => setProduct({...product, countInStock: e.target.value})} required />
+        <label htmlFor="countInStock">Count In Stock</label>
+        <input type="number" id="countInStock" placeholder="Count In Stock" onChange={(e) => setProduct({...product, countInStock: e.target.value})} required />
       </div>
       <div className="form-group">
         <label htmlFor="description">Product Description</label>
@@ -61,7 +76,7 @@ const Admin = ({ adminKey }) => {
       </div>
       <div className="form-group">
         <label htmlFor="image">Image</label>
-        <input type="file" id="image" onChange={handleFileChange} required />
+        <input type="file" id="image" onChange={handleFileChange} accept="image/*" required />
       </div>
       <button type="submit" style={{ marginTop: '20px', padding: '15px 30px', background: '#222', color: 'white', border: 'none', cursor: 'pointer' }}>Upload Product</button>
       <Link to="/admin/orders" style={{ display: 'block', marginTop: '20px', textAlign: 'center', color: '#222' }}>
