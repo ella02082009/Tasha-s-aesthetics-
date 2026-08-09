@@ -14,7 +14,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
-  'https://tasha-s-aesthetics-frontend.vercel.app', // Replace with your exact Vercel URL
+  'https://tasha-s-aesthetics.vercel.app', // Replace with your exact Vercel URL
 ];
 app.use(cors({
   origin: allowedOrigins,
